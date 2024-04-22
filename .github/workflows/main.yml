@@ -24,22 +24,20 @@ jobs:
   
           echo "$htmlhead" > index.html
           echo "<ul>" >> index.html
-
-          # 获取以 "202" 开头的目录，并按文件时间逆序排序
-          for dir in $(find . -type d -name "202*" -printf "%p\n" | sort -r  ); do
+          # 获取以 "202" 开头的目录
+          for dir in $(find . -type d -name "202*" -printf "%p\n" | sort -r ); do
               dir_name=$(basename "$dir")
               echo "<li><strong>$dir_name</strong></li>" >> index.html
               echo "<ul>" >> index.html
-              # 获取目录下的 HTML 文件并按文件时间逆序排序
+              # 获取目录下的 HTML 文件并处理空格
               while IFS= read -r -d '' file; do
                   echo "文件名是===$file==="
                   file_name=$(basename "$file")
                   echo "<li><a href=\"$file\" target=\"_blank\">$file_name</a></li>" >> index.html
-              done < <(find "$dir" -maxdepth 1 -name '*.html' -printf "%T@ %p\n" | sort -nr | cut -d ' ' -f 2-)
-          
+              done < <(find "$dir" -maxdepth 1 -name '*.html' -print0 | sort -rz)
+
               echo "</ul>" >> index.html
           done
-
           echo "</ul>" >> index.html
 
           # 添加无需转义的 HTML 代码段
