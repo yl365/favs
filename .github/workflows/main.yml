@@ -25,12 +25,12 @@ jobs:
           echo "$htmlhead" > index.html
           echo "<ul>" >> index.html
           # 获取以 "202" 开头的目录
-          for dir in $(find . -type d -name "202*" -printf "%p\n" | sort -r ); do
+          for dir in $(find . -type d -name "202*" -printf "\"%p\"\n" | sort -r ); do
               dir_name=$(basename "$dir")
               echo "<li><strong>$dir_name</strong></li>" >> index.html
               echo "<ul>" >> index.html
               # 获取目录下的 HTML 文件并去掉路径前的 "./"
-              for file in $(find "$dir" -maxdepth 1 -name '*.html' -printf "%p\n" | sort -r ); do
+              for file in $(find "$dir" -maxdepth 1 -name '*.html' -printf "\"%p\"\n" | sort -r ); do
                   file_name=$(basename "$file")
                   echo "<li><a href=\"$file\" target=\"_blank\">$file_name</a></li>" >> index.html
               done
